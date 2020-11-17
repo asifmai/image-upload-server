@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col.text-center
+        h1 Image Upload
+    .row
+      .col-md-6.mx-auto.text-center.card
+        form(action="/upload", method="post", encType="multipart/form-data")
+          .form-group
+            label(for="image") Select Image to Upload
+            input.form-control(type="file" required accept="image/*" name="image")
+            button.btn.btn-primary.mt-2(type="submit") Submit
+    .row
+      .col.card.mt-3
+        table.table
+          colgroup
+            col(width="80%")
+            col(width="20%")
+          thead
+            tr
+              th Image
+              th Actions
+          tbody
+            each image in images
+              tr
+                td
+                  img(src=`/img/${image.fileName}`, style='width: 100px')
+                td
+                  a.btn.btn-danger(href=`/delete/${image._id}`, title="Delete Image")
+                    i.fas.fa-trash
