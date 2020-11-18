@@ -10,7 +10,7 @@ block content
         form(action="/upload", method="post", encType="multipart/form-data")
           .form-group
             label(for="image") Select Image to Upload
-            input.form-control(type="file" required accept="image/*" name="image")
+            input.form-control(type="file", multiple, required, accept="image/*", name="image")
             button.btn.btn-primary.mt-2(type="submit") Submit
     .row
       .col.card.mt-3

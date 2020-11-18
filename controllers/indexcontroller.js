@@ -32,17 +32,25 @@ module.exports.delete_get = async (req, res, next) => {
 }
 
 module.exports.upload_post = async (req, res) => {
-  const fileExtension = req.files.image.name.split('.').pop();
-  const fileName = uuid();
-  const fullFileName = fileName + '.' + fileExtension;
-  const filePath = path.resolve(__dirname, `../public/img/${fullFileName}`);
+  const images = [];
+  if (Array.isArray(req.files.image)) {
+    images.push(...req.files.image);
+  } else {
+    images.push(req.files.image);
+  }
+  for (let i = 0; i < images.length; i++) {
+    const fileExtension = images[i].name.split('.').pop();
+    const fileName = uuid();
+    const fullFileName = fileName + '.' + fileExtension;
+    const filePath = path.resolve(__dirname, `../public/img/${fullFileName}`);
+    
+    const newImage = new Image({
+      fileName: fullFileName,
+    })
+    await newImage.save();
   
-  const newImage = new Image({
-    fileName: fullFileName,
-  })
-  await newImage.save();
+    images[i].mv(filePath);
+  };
 
-  req.files.image.mv(filePath, (err) => {
-    return res.redirect('/');
-  })
+  res.redirect('/');
 }
